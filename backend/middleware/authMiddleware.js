@@ -8,7 +8,7 @@ const verifyToken = (req, res, next) => {
         return res.status(401).json({ message: "Access denied. No token provided." });
     }
 
-    // Extract token from "Bearer <token>"
+    // Extract token from "Bearer"
     const token = authHeader.split(" ")[1];
 
     try {

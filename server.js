@@ -3,6 +3,7 @@ const connectDb =require('./backend/config/connectDb.js')
 const authRoutes = require('./backend/routes/authRoutes.js')
 const dotenv = require('dotenv')
 const userRoutes = require('./backend/routes/userRoutes.js')
+const cors = require('cors')
 
 // Connect to database
 dotenv.config();
@@ -10,7 +11,7 @@ connectDb();
 const app = express();
 
 // Middleware 
-
+app.use(cors())
 app.use(express.json());
 
 // Routes
