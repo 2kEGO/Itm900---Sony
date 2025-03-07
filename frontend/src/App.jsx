@@ -12,14 +12,12 @@ function App() {
       <BrowserRouter>
         <Routes>
 
-          <Route path='/login' element={<Login/>}></Route>
-          
-          <Route element={<ProtectedRoutes allowedRoles={["admin", "manager"]}/>}>
-            <Route path='/register' element={<Register/>}></Route>
-          </Route>
+          <Route path='/login' element={<Login/>}></Route>         
 
-          <Route element={<ProtectedRoutes allowedRoles={["admin", "manager", "user"]}/>}>
+          <Route element={<ProtectedRoutes/>}>
             <Route path='/user' element={<UserPage/>}></Route>
+            <Route path='/register' element={<Register/>}></Route>
+
           </Route>
         
         </Routes>
