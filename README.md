@@ -3,6 +3,7 @@
 Clone the repository:
 
 git clone <repository-url>
+
 Navigate to the project directory:
 
 cd ITM900 
