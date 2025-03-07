@@ -7,6 +7,7 @@ git clone <repository-url>
 Navigate to the project directory:
 
 cd ITM900 
+
 Install dependencies for both the server and client:
 
 npm install
