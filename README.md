@@ -31,6 +31,8 @@ JWT_SECRET=<your-jwt-secret>
 ### 5. Run the Application
 ```sh
 npm run dev
+cd frontend
+npm run dev
 ```
 ### 6. Access the Application
 Open your browser and go to:
