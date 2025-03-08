@@ -1,5 +1,3 @@
-﻿# Itm900---Sony
-
 # ITM900 Project
 
 ## Getting Started
