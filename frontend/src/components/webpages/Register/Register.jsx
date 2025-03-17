@@ -11,8 +11,7 @@ const Register = () => {
     const [email, setEmail] = useState("")
     const [role, setRole] = useState("")
 
-    const [accountCreated, setAccountCreated] = useState(false)
-
+    
     const navigate = useNavigate()
 
     const handleSubmit = async(e) => {
