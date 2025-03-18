@@ -2,6 +2,7 @@ import React from 'react'
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from 'react-router-dom';
+import FileUpload from '../UploadFiles/Upload'
 
 const UserPage = () => {
 
@@ -18,6 +19,7 @@ const UserPage = () => {
     <>
       <div>UserPage</div>
       {getRole === "user" ? null: <button onClick={handleReg}>Register User</button>}
+      <FileUpload/>
     </>
     
     
