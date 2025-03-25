@@ -7,7 +7,7 @@ export const LoginUser = async(user, pwd) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({username: user, password: pwd}),
+            body: JSON.stringify({userName: user, password: pwd}),
         });
 
         if(!res.ok) {
@@ -22,12 +22,14 @@ export const LoginUser = async(user, pwd) => {
         }
         
         const token = data.token;
+        const projectAccess = data.projectAccess;
         const role = data.role;
 
         //Store values in cookies
         Cookies.set('token', token, { expires: 7 });
         Cookies.set('username', user, { expires: 7 });
-        Cookies.set('role', role);
+        Cookies.set('projectAccess', projectAccess);
+        Cookies.set('role', role )
         
         return true;
     
@@ -39,14 +41,14 @@ export const LoginUser = async(user, pwd) => {
 }
 
 
-export const RegisterUser = async(user, pwd, email, role) => {
+export const RegisterUser = async(submissionData) => {
     try {
         const res = await fetch('http://localhost:5000/api/auth/register',{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({username: user, password: pwd, email, role}),
+            body: JSON.stringify(submissionData),
         });
 
 

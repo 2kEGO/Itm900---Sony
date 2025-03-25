@@ -6,9 +6,9 @@ const jwt = require('jsonwebtoken')
 const register = async(req, res) => {
 
     try {
-        const {username, password, role, email} = req.body;
+        const {firstName, lastName, userName, email, role, password, projectAccess, message} = req.body;
 
-        const existingUser = await User.findOne({username})
+        const existingUser = await User.findOne({userName})
 
         if(existingUser){
             return res.status(400).json({msg: 'Username already exists'})
@@ -16,10 +16,10 @@ const register = async(req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10)
 
-        const newUser = new User({username, password: hashedPassword, role, email});
+        const newUser = new User({firstName, lastName, userName, email, role, password, projectAccess, message, password: hashedPassword,});
 
         await newUser.save();
-        res.status(200).json({msg: `Username ${username} created successfully`})
+        res.status(200).json({msg: `Username ${userName} created successfully`})
 
 
     } catch (error) {
@@ -30,9 +30,9 @@ const register = async(req, res) => {
 
 const login = async (req, res) => {
     try {
-        const {username, password} = req.body;
+        const {userName, password} = req.body;
 
-        const user = await User.findOne({username});
+        const user = await User.findOne({userName});
         
         if(!user){
             return res.status(400).json({msg: 'User not found'})
@@ -44,9 +44,9 @@ const login = async (req, res) => {
             return res.status(400).json({msg: 'Invalid credentials'})
         }
 
-        const token = jwt.sign({id: user._id, role: user.role}, process.env.SECRET_KEY,{expiresIn: '1h'});
+        const token = jwt.sign({id: user._id}, process.env.SECRET_KEY,{expiresIn: '1h'});
 
-        res.status(200).json({token});
+        res.status(200).json({token, projectAccess: user.projectAccess, role: user.role});
 
     } catch (error) {
         res.status(400).json({msg: "Internal Server Error"})

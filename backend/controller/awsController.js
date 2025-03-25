@@ -60,5 +60,24 @@ const completeUpload = async (req, res) => {
       res.status(500).send({ error: error.message });
     }
 };
+
+const listS3Items = async (req, res) => {
+  const params = { Bucket: process.env.S3_BUCKET };
+
+  try {
+    const data = await s3.listObjectsV2(params).promise();
+    const items = data.Contents.map((item) => ({
+      key: item.Key,
+      lastModified: item.LastModified,
+      size: item.Size,
+      url: `https://${process.env.S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${item.Key}`,
+    }));
+
+    res.json(items);
+  } catch (error) {
+    console.error("Error fetching S3 items:", error);
+    res.status(500).json({ error: "Failed to fetch items from S3" });
+  }
+};
   
-module.exports = { startUpload, uploadPart, completeUpload, multerUpload };
+module.exports = { startUpload, uploadPart, completeUpload, multerUpload, listS3Items };

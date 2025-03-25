@@ -5,7 +5,7 @@ import React from 'react'
 const ProtectedRoutes = () => {
     const token = Cookies.get("token")
 
-    return token ? <Outlet/> : <Navigate to="/login"/>   
+    return token ? <Outlet/> : <Navigate to="/"/>   
 
 }
 

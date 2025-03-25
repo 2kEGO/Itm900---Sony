@@ -1,0 +1,157 @@
+.channel-container {
+    
+}
+
+.channel-wrapper {
+    display: flex;
+    flex-direction: row;
+
+    width: 100%;
+    min-height: 100vh;
+}
+
+.channel-left-container {
+    width: 30%;
+    min-height: 100vh;
+    
+}
+
+.channel-left-wrapper {
+    
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    background-color: black;
+}
+
+.channels-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    list-style: none;
+
+    padding: 0;
+    margin: 0;
+
+    width: 100%;
+    height: 100%;
+}
+
+.channels-title h1 {
+    color: white;
+    font-family: var(--font-inter);
+    margin-top: 10px;
+}
+
+.channel {
+    padding: 1em;
+    
+    width: 100%;
+}
+
+.channel button{
+    height: 5vh;
+    width: 100%;
+
+    text-align: start;
+    font-family: var(--font-inter);
+    font-weight: 500;
+    font-size: 1.5rem;
+    color: white;
+
+    padding-left: 20px;
+
+    background-color: transparent;
+    border: none;
+    border-radius: 5px;
+}
+
+.channel button:hover {
+    background-color: rgb(241, 178, 163);
+}
+
+
+.channel-right-container {
+    width: 70%;
+    min-height: 100vh;
+    padding: 1em
+}
+
+.channel-right-wrapper {
+    display: flex;
+    
+}
+
+.channel-right-container {
+    width: 70%;
+    height: 100%;
+}
+
+.channel-right-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+
+/* FOR SELECT PROJECT */
+
+.projects-container {
+    min-height: 100vh;
+    width: 100%;
+
+    margin-top: 15vh;
+}
+
+.projects-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.project-title h1 {
+    margin-bottom: 5vh;
+}
+
+.project-selection-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 20px;
+    border: 1px solid black;
+    border-radius: 5px;
+
+    min-height: 30vh;
+    min-width: 50%;
+}
+
+.project-selection-container button{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    height: 100%;
+    width: 100%;
+    
+    margin-left: 5px;
+    background-color: transparent;
+}
+
+.project-selection-container button:hover {
+    background-color: rgb(241, 178, 163);
+}
+
+.project-selection-container button svg {
+    height: 50%;
+    width: 50%;
+}

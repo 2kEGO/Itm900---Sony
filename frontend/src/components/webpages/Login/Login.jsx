@@ -2,6 +2,8 @@ import React, {useState, useEffect, useContext} from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { LoginUser } from '../../../services/authService'
 
+import "./Login.css"
+
 const Login = () => {
   
     const [user, setUser] = useState("")
@@ -19,7 +21,7 @@ const Login = () => {
                 console.log("Username or password incorrect")
             }
 
-            navigate('/user')
+            navigate('/home')
 
         } catch (error) {
             console.error(error)
@@ -31,41 +33,42 @@ const Login = () => {
     <>
         <div className="login-container">
 
-            <div className="login-wrapper-left">
-                <img src="" alt="" />
-            </div>
+            <div className="login-wrapper">
 
-            <form className="login-wrapper-right">
 
-                <div className="login-item-container" id='login-title'>
-                    <h1>Sign in</h1>
-                </div>
+                <form className='form-container'>
 
-                <div className="login-item-container">
-                    <label htmlFor="username">Username:</label>
-                    <input type="text"
-                            id='username' 
-                            value={user}
-                            onChange={(e) => setUser(e.target.value)}
-                            placeholder='Username'
+                    <div className="login-item-container" id='login-title'>
+                        <h1>Sign in</h1>
+                    </div>
+
+                    <div className="login-item-container">
+                        <label htmlFor="username">Username:</label>
+                        <input type="text"
+                                id='username' 
+                                value={user}
+                                onChange={(e) => setUser(e.target.value)}
+                                placeholder='Username'
+                                />
+                    </div>
+
+                    <div className="login-item-container">
+                        <label htmlFor="pwd">Password:</label>
+                        <input type="password" 
+                                id='pwd'
+                                value={pwd}
+                                onChange={(e) => setPwd(e.target.value)}
+                                placeholder='Password'
                             />
-                </div>
+                    </div>
 
-                <div className="login-item-container">
-                    <label htmlFor="pwd">Password:</label>
-                    <input type="password" 
-                            id='pwd'
-                            value={pwd}
-                            onChange={(e) => setPwd(e.target.value)}
-                            placeholder='Password'
-                        />
-                </div>
+                    <div className="login-item-container" id='login-button-container'>
+                        <button onClick={handleSubmit} id='login-button'>Sign in</button>
+                    </div>
 
-                <div className="login-item-container" id='login-button-container'>
-                    <button onClick={handleSubmit} id='login-button'>Sign in</button>
-                </div>
+                </form>
 
-            </form>
+            </div>
         </div>    
     </>
   )

@@ -1,14 +1,20 @@
 import React, { useState } from "react";
 import axios from "axios";
+import "./Upload.css"
 
 const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB
 
 const FileUpload = () => {
   const [file, setFile] = useState(null);
+  const [note, setNote] = useState("");
   const [fileUrl, setFileUrl] = useState("");
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
+  };
+
+  const handleNoteChange = (e) => {
+    setNote(e.target.value);
   };
 
   const handleFileUpload = async () => {
@@ -22,16 +28,11 @@ const FileUpload = () => {
     try {
       // Start the multipart upload
       const startUploadResponse = await axios.post(
-        "http://localhost:3001/start-upload",
-        {
-          fileName,
-          fileType,
-        }
+        "http://localhost:5000/start-upload",
+        { fileName, fileType, note } // Send note with file metadata
       );
 
       uploadId = startUploadResponse.data.uploadId;
-
-      // Split the file into chunks and upload each part
       const totalParts = Math.ceil(file.size / CHUNK_SIZE);
 
       for (let partNumber = 1; partNumber <= totalParts; partNumber++) {
@@ -44,9 +45,10 @@ const FileUpload = () => {
         formData.append("fileName", fileName);
         formData.append("partNumber", partNumber);
         formData.append("uploadId", uploadId);
+        formData.append("note", note); // Include the note in every chunk
 
         const uploadPartResponse = await axios.post(
-          "http://localhost:3001/upload-part",
+          "http://localhost:5000/upload-part",
           formData,
           {
             headers: {
@@ -63,12 +65,8 @@ const FileUpload = () => {
 
       // Complete the multipart upload
       const completeUploadResponse = await axios.post(
-        "http://localhost:3001/complete-upload",
-        {
-          fileName,
-          uploadId,
-          parts,
-        }
+        "http://localhost:5000/complete-upload",
+        { fileName, uploadId, parts, note } // Send the note with completion
       );
 
       setFileUrl(completeUploadResponse.data.fileUrl);
@@ -79,11 +77,17 @@ const FileUpload = () => {
   };
 
   return (
-    <div>
+    <div className="upload-container">
       <input type="file" onChange={handleFileChange} />
+      <textarea 
+        placeholder="Comment Here" 
+        value={note} 
+        onChange={handleNoteChange} 
+      />
       <button disabled={!file} onClick={handleFileUpload}>
         Upload
-      </button>
+      </button> 
+
       {fileUrl && (
         <div>
           <a href={fileUrl} target="_blank" rel="noopener noreferrer">
