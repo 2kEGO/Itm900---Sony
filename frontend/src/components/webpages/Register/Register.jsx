@@ -133,7 +133,7 @@ const ExternalUserSetupForm = () => {
     lastName: '',
     userName: '',
     email: '',
-    role: 'Mixing Engineer',
+    role: '',
     projectAccess: [],
     customMessage: ''
   });
@@ -142,13 +142,6 @@ const ExternalUserSetupForm = () => {
   const [generatedPassword, setGeneratedPassword] = useState('');
   const [formSubmitted, setFormSubmitted] = useState(false);
   
-  // Sample projects data
-  const availableProjects = [
-    { id: 1, title: "Summer Vibes EP", artist: "Sunset Dreams" },
-    { id: 2, title: "Urban Reflections", artist: "City Lights" },
-    { id: 3, title: "Digital Dreams", artist: "Binary Beats" },
-    { id: 4, title: "Acoustic Sessions", artist: "Emma Stone" }
-  ];
   
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -158,14 +151,6 @@ const ExternalUserSetupForm = () => {
     });
   };
   
-  
-  const handleProjectSelect = (e) => {
-    const selectedOptions = Array.from(e.target.selectedOptions, option => parseInt(option.value));
-    setFormData({
-      ...formData,
-      projectAccess: selectedOptions
-    });
-  };
   
   const generateRandomPassword = () => {
     // Generate a random password with letters, numbers, and special characters
@@ -295,7 +280,7 @@ const ExternalUserSetupForm = () => {
                 <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">
                     Role*
                 </label>
-                <select
+                <input
                     id="role"
                     name="role"
                     value={formData.role}
@@ -303,36 +288,12 @@ const ExternalUserSetupForm = () => {
                     required
                     className="w-full p-2 border rounded focus:ring-blue-500 focus:border-blue-500"
                 >
-                    <option value="Mixing Engineer">Mixing Engineer</option>
+                    {/* <option value="Mixing Engineer">Mixing Engineer</option>
                     <option value="Mastering Engineer">Mastering Engineer</option>
                     <option value="Producer">Producer</option>
                     <option value="Session Musician">Session Musician</option>
-                    <option value="Graphic Designer">Graphic Designer</option>
-                </select>
-                </div>
-                
-                <div>
-                <label htmlFor="projectAccess" className="block text-sm font-medium text-gray-700 mb-1">
-                    Grant Access to Projects*
-                </label>
-                <select
-                    id="projectAccess"
-                    name="projectAccess"
-                    multiple
-                    value={formData.projectAccess}
-                    onChange={handleProjectSelect}
-                    required
-                    className="w-full p-2 border rounded focus:ring-blue-500 focus:border-blue-500 h-32"
-                >
-                    {availableProjects.map(project => (
-                    <option key={project.id} value={project.id}>
-                        {project.title} - {project.artist}
-                    </option>
-                    ))}
-                </select>
-                <p className="mt-1 text-sm text-gray-500">
-                    Hold Ctrl/Cmd to select multiple projects
-                </p>
+                    <option value="Graphic Designer">Graphic Designer</option> */}
+                </input>
                 </div>
                 
                 

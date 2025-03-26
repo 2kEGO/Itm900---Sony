@@ -1,19 +1,49 @@
-import React from 'react'
+import React,{useState, useEffect} from 'react'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faFolderClosed} from "@fortawesome/free-solid-svg-icons"
 import { useNavigate } from 'react-router-dom'
-import { availableProjects } from '../../../context/data'
+import Cookies from 'js-cookie';
 
 import "./channel.css"
 
 const SelectProject = () => {
 
-  
+  const [project, setProject] = useState([]);  // Declare state for project
+  const getId = Cookies.get("id");
   const navigate = useNavigate();
+
+  // Function to fetch project data and set it into state
+  const fetchProject = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/sql/auth/projects/${getId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("Fetched Project:", data);  // Check the response in the console
+
+      // Set the fetched project data into the state
+      setProject(data);
+
+    } catch (error) {
+      console.error("Error fetching project:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProject(); 
+  }, []); 
 
   return (
     <>
-      <div className="projects-container">
+    <div className="projects-container">
         <div className="projects-wrapper">
 
         <div className="project-title">
@@ -21,10 +51,10 @@ const SelectProject = () => {
         </div>
 
         <div className="project-selection-container">
-          {availableProjects.map((project) => (
-            <button key={project.id} className="project-button" onClick={() => navigate(`${project.route}`)}>
+          {project.map((projects, index) => (
+            <button key={index} className="project-button" onClick={() => navigate(`${project.route}`)}>
               <FontAwesomeIcon icon={faFolderClosed} style={{color: "#74C0FC",}} />
-              {project.title}
+              {projects.project_name}
             </button>
           ))}
         </div>
@@ -32,7 +62,8 @@ const SelectProject = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
+
 
 export default SelectProject;

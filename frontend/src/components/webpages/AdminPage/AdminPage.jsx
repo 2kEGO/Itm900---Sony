@@ -1,6 +1,6 @@
 import React from 'react'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faUserPlus, faUsers} from "@fortawesome/free-solid-svg-icons"
+import {faUserPlus, faUsers, faDiagramProject, faListCheck} from "@fortawesome/free-solid-svg-icons"
 import { useNavigate } from 'react-router-dom'
 import "../UserPage/channelPage.css"
 
@@ -27,6 +27,16 @@ const AdminPage = () => {
           <button onClick={() => navigate("/home/admin/userlist")}>
             <FontAwesomeIcon icon={faUsers} />
             User List
+          </button>
+
+          <button onClick={() => navigate("/home/admin/projectlist")}>
+          <FontAwesomeIcon icon={faListCheck} />
+            Project List
+          </button>
+          
+          <button onClick={() => navigate("/home/admin/createproject")}>
+          <FontAwesomeIcon icon={faDiagramProject} />
+            Create New Project
           </button>
 
           

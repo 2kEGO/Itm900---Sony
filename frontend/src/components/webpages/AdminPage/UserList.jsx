@@ -124,13 +124,13 @@ const UserManagementDashboard = () => {
     }
   ];
   
-  // Filter users based on active tab, search query, and role filter
+  
   const filteredUsers = users.filter(user => {
-    // Filter by tab
+    
     if (activeTab === 'internal' && user.type !== 'internal') return false;
     if (activeTab === 'external' && user.type !== 'external') return false;
     
-    // Filter by search query
+    
     if (searchQuery) {
       const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
       const query = searchQuery.toLowerCase();
@@ -139,22 +139,22 @@ const UserManagementDashboard = () => {
       }
     }
     
-    // Filter by role
+  
     if (filterRole && user.role !== filterRole) return false;
     
     return true;
   });
   
-  // Get unique roles for the filter dropdown
+  
   const uniqueRoles = [...new Set(users.map(user => user.role))];
   
-  // Handle user selection for details
+  
   const handleUserSelect = (user) => {
     setSelectedUser(user);
     setShowUserDetailModal(true);
   };
   
-  // UI for User Detail Modal
+  
   const UserDetailModal = () => {
     if (!selectedUser) return null;
     

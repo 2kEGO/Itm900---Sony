@@ -4,7 +4,11 @@ const authRoutes = require('./backend/routes/authRoutes.js');
 const dotenv = require('dotenv');
 const userRoutes = require('./backend/routes/userRoutes.js');
 const cors = require('cors');
-const awsRoutes = require('./backend/routes/awsRoutes.js'); 
+const awsRoutes = require('./backend/routes/awsRoutes.js');
+
+//for SQL//
+const connectsql = require("./backend/config/connectsql.js") 
+const authSqlRoutes = require("./backend/routes/authRouteSql.js")
 
 const multer = require('multer');
 const multerUpload = multer();
@@ -21,15 +25,22 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Load environment variables
+
 dotenv.config();
 
 // Connect to database
-connectDb();
+
+connectsql();
 
 // Routes
-app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
+// app.use("/api/auth", authRoutes);
+// app.use("/api/users", userRoutes);
 // app.use("/api/upload", awsRoutes); 
+
+app.use("/sql/auth", authSqlRoutes)
+
+
+//AWS access
 
 AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY,
@@ -113,6 +124,12 @@ app.get('/list-objects', async (req, res) => {
     res.status(500).send("Error fetching objects from S3");
   }
 });
+
+
+
+
+
+
 
 // Start server
 const PORT = process.env.PORT || 8000;
