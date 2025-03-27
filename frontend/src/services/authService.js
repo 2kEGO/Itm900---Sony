@@ -2,12 +2,12 @@ import Cookies from 'js-cookie';
 
 export const LoginUser = async(user, pwd) => {
     try {
-        const res = await fetch('http://localhost:5000/sql/auth/login',{
+        const res = await fetch(`http://localhost:${import.meta.env.VITE_PORT}/sql/auth/login`,{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({emailOrUsername: user, password: pwd}),
+            body: JSON.stringify({username: user, password: pwd}),
         });
 
         if(!res.ok) {
@@ -40,39 +40,41 @@ export const LoginUser = async(user, pwd) => {
     }    
 }
 
-export const RegisterUser = async(submissionData) => {
+export const RegisterUser = async (firstName, lastName, username, email, role, password ) => {
     try {
-        const res = await fetch('http://localhost:5000/sql/auth/register',{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(submissionData),
-        });
-
-
-        if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
-        }
-
-        const data = await res.json();
-
-        if(!data){
-            console.log('No data from server');
-            return;
-        }
-
-        console.log(data);
-        return true;
-
+      const res = await fetch(`http://localhost:${import.meta.env.VITE_PORT}/sql/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({firstName: firstName, lastName: lastName, username: username, email: email, role: role, password: password}),
+      });
+  
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+  
+      const data = await res.json();
+  
+      // If no data is returned, log and return false
+      if (!data) {
+        console.log('No data from server');
+        return false;
+      }
+  
+      console.log(data);
+      return true;
+  
     } catch (error) {
-        console.error(error)
+      console.error('Error during user registration:', error);
+      return false; // Return false or handle error with a specific message
     }
 }
+  
 
 export const UpdateUser = async (userId, updatedData) => {
     try {
-        const res = await fetch(`http://localhost:5000/sql/auth/update/${userId}`, {
+        const res = await fetch(`http://localhost:${import.meta.env.VITE_PORT}/sql/auth/update/${userId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -102,7 +104,7 @@ export const UpdateUser = async (userId, updatedData) => {
 
 export const DeleteUser = async (userId) => {
     try {
-        const res = await fetch(`http://localhost:5000/sql/auth/delete/${userId}`, {
+        const res = await fetch(`http://localhost:${import.meta.env.VITE_PORT}/sql/auth/delete/${userId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

@@ -13,6 +13,8 @@ const ChannelPage = () => {
 
   const getRole = Cookies.get("role");
   const getUserName = Cookies.get("username");
+  getRole.toLowerCase();
+  console.log(getRole)
 
   const navigate = useNavigate();
 

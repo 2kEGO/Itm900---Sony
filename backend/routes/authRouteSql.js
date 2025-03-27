@@ -30,23 +30,29 @@ router.post('/register', async (req, res) => {
 
 
 router.post('/login', async (req, res) => {
-  const { emailOrUsername, password } = req.body;
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    return res.status(400).json({ message: 'Username and password are required' });
+  }
 
   try {
-    const user = await getUserByEmailOrUsername(emailOrUsername, emailOrUsername);
+    const query = `SELECT * FROM userInfo WHERE username = $1 LIMIT 1`;
+    const { rows } = await pool.query(query, [username]);
+    const user = rows[0];
+
     if (!user) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
     const token = jwt.sign(
-      { userId: user.user_id, username: user.username, email: user.email },
-      process.env.SECRET_KEY, // Ensure this is in your .env file
+      { userId: user.user_id, username: user.username },
+      process.env.SECRET_KEY,
       { expiresIn: '1h' }
     );
 
@@ -56,11 +62,13 @@ router.post('/login', async (req, res) => {
       userId: user.user_id,
       role: user.role
     });
-    
+
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
   }
 });
+
 
 // Update User
 router.put('/update/:id', async (req, res) => {
