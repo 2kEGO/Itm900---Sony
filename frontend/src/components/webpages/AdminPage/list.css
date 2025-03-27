@@ -1,0 +1,133 @@
+.list-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full viewport height */
+  background-color: #f8f9fa; /* Light background */
+}
+
+.list-container .list-wrapper {
+  width: 100%;
+  max-width: 900px;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.list-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.list-container th,
+.list-container td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+.list-container th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.list-container tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.list-container tr:hover {
+  background-color: #eaeaea;
+}
+
+.list-container button {
+  background-color: #ff4d4d; /* Red color for delete action */
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.list-container button:hover {
+  background-color: #d43f3f; /* Darker red on hover */
+  transform: scale(1.05);
+}
+
+.list-container button:active {
+  transform: scale(0.95);
+}
+
+.list-container td button {
+  margin-left: 10px;
+}
+
+.update-user-container {
+  width: 60%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.update-user-container h1 {
+  text-align: center;
+  color: #333;
+}
+
+.update-user-container .form-label {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
+  color: #555;
+}
+
+.update-user-container .form-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.update-user-container .form-input:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+.update-user-container .user-select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.update-user-container .submit-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.update-user-container .submit-button:hover {
+  background-color: #2980b9;
+}
+
+.update-user-container .message {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 16px;
+  font-weight: bold;
+}

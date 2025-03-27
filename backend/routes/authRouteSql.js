@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { createUser, getUserByEmailOrUsername } = require('../models/sqlUserModel');
+const { createUser, getUserByEmailOrUsername, updateUser, deleteUser, getUserById } = require('../models/sqlUserModel');
 const pool = require ('./pool') 
 const router = express.Router();
 
@@ -10,16 +10,16 @@ router.post('/register', async (req, res) => {
   const { firstName, lastName, username, email, role, password } = req.body;
 
   try {
-    // Check if user already exists
+    
     const existingUser = await getUserByEmailOrUsername(email, username);
     if (existingUser) {
       return res.status(400).json({ message: 'User with that email or username already exists' });
     }
 
-    // Hash password
+    
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create user
+    
     const newUser = await createUser(firstName, lastName, username, email, role, hashedPassword);
     res.status(201).json({ message: 'User created successfully', user: newUser });
     
@@ -28,7 +28,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// Login User
+
 router.post('/login', async (req, res) => {
   const { emailOrUsername, password } = req.body;
 
@@ -38,13 +38,12 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // Compare passwords
+    
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // Create JWT token
     const token = jwt.sign(
       { userId: user.user_id, username: user.username, email: user.email },
       process.env.SECRET_KEY, // Ensure this is in your .env file
@@ -68,27 +67,45 @@ router.put('/update/:id', async (req, res) => {
   const userId = req.params.id;
   const { firstName, lastName, username, email, role, password } = req.body;
 
+  
+  if (!firstName || !lastName || !username || !email || !role || !password) {
+    return res.status(400).json({ message: 'All fields are required: firstName, lastName, username, email, role, password.' });
+  }
+
   try {
-    // Check if the user exists
-    const existingUser = await getUserByEmailOrUsername(email, username);
-    if (existingUser && existingUser.user_id !== parseInt(userId)) {
-      return res.status(400).json({ message: 'User with that email or username already exists' });
-    }
-
-    if (password) {
-      const hashedPassword = await bcrypt.hash(password, 10);
-    }
-
-    // Update the user
-    const updatedUser = await updateUser(userId, firstName, lastName, username, email, role, hashedPassword);
     
-    if (!updatedUser) {
+    const existingUser = await getUserById(userId);
+    if (!existingUser) {
       return res.status(404).json({ message: 'User not found' });
     }
 
+    // Ensure the email and username are unique
+    const conflictingUser = await getUserByEmailOrUsername(email, username);
+    if (conflictingUser && conflictingUser.user_id !== parseInt(userId)) {
+      return res.status(400).json({ message: 'Email or username is already taken by another user.' });
+    }
+
+    
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    
+    const query = `
+      UPDATE userInfo
+      SET first_name = $1, last_name = $2, username = $3, email = $4, role = $5, password = $6, updated_at = NOW()
+      WHERE user_id = $7
+      RETURNING *;
+    `;
+
+    const values = [firstName, lastName, username, email, role, hashedPassword, userId];
+
+    
+    const { rows } = await pool.query(query, values);
+    const updatedUser = rows[0];
+
     res.status(200).json({ message: 'User updated successfully', user: updatedUser });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error updating user:', error);
+    res.status(500).json({ message: 'Error updating user' });
   }
 });
 
@@ -98,15 +115,12 @@ router.delete('/delete/:id', async (req, res) => {
   const userId = req.params.id;
 
   try {
-    
-    const user = await getUserByEmailOrUsername(userId, userId);
-    if (!user) {
+    const result = await deleteUser(userId); 
+
+    if (result.rowCount === 0) { 
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Delete user
-    await deleteUser(userId);
-    
     res.status(200).json({ message: 'User deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -153,8 +167,24 @@ router.get('/projects/all', async (req, res) => {
 
   try {
     const query = `
-      SELECT *
-      FROM projects  
+      SELECT 
+    p.project_id,
+    p.project_name,
+    p.project_url,
+    STRING_AGG(u.username, ', ') AS participating_users,
+    COUNT(DISTINCT u.user_id) AS user_count
+FROM 
+    projects p
+LEFT JOIN 
+    project_users pu ON p.project_id = pu.project_id
+LEFT JOIN 
+    userinfo u ON pu.user_id = u.user_id
+GROUP BY 
+    p.project_id,
+    p.project_name,
+    p.project_url
+ORDER BY 
+    p.project_name; 
     `;
 
     const { rows } = await pool.query(query);
@@ -317,19 +347,19 @@ router.delete('/projects/:projectId', async (req, res) => {
     `;
     await client.query(deleteProjectQuery, [projectId]);
 
-    await client.query('COMMIT'); // Commit the transaction
+    await client.query('COMMIT'); 
 
     res.json({ message: 'Project deleted successfully' });
+
   } catch (error) {
-    await client.query('ROLLBACK'); // Rollback the transaction if there's an error
+
+    await client.query('ROLLBACK');
     console.error('Error deleting project:', error);
     res.status(500).json({ message: 'Error deleting project' });
+    
   } finally {
-    client.release(); // Release the client back to the pool
+    client.release();
   }
 });
-
-
-
 
 module.exports = router;

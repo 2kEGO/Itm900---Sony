@@ -75,17 +75,32 @@ const updateUser = async (userId, firstName, lastName, username, email, role, pa
   };
   
   // Delete a user by ID
-  const deleteUser = async (userId) => {
-    const query = 'DELETE FROM userInfo WHERE user_id = $1 RETURNING *;';
-    const values = [userId];
-  
-    try {
-      const { rows } = await pool.query(query, values);
-      return rows[0];
-    } catch (error) {
-      console.error(error);
-      throw new Error('Error deleting user');
-    }
-  };
+const deleteUser = async (userId) => {
+  const query = 'DELETE FROM userInfo WHERE user_id = $1 RETURNING *;';
+  const values = [userId];
 
-module.exports = { createUser, getUserByEmailOrUsername, updateUser, deleteUser };
+  try {
+    const { rows } = await pool.query(query, values);
+    return rows[0];
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error deleting user');
+  }
+};
+
+// Function to get a user by their user_id
+const getUserById = async (userId) => {
+  const query = 'SELECT * FROM userInfo WHERE user_id = $1';
+  const values = [userId];
+  
+  try {
+    const { rows } = await pool.query(query, values);
+    return rows[0]; // Return the first matching row (should be one user)
+  } catch (error) {
+    console.error('Error fetching user by ID:', error);
+    throw new Error('Error fetching user by ID');
+  }
+};
+
+
+module.exports = { createUser, getUserByEmailOrUsername, updateUser, deleteUser, getUserById };

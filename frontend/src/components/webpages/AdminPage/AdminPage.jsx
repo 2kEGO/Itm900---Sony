@@ -24,9 +24,14 @@ const AdminPage = () => {
             SET UP NEW USER
           </button>
           
-          <button onClick={() => navigate("/home/admin/userlist")}>
+          <button onClick={() => navigate("/home/admin/updateUser")}>
             <FontAwesomeIcon icon={faUsers} />
-            User List
+            Update User
+          </button>
+
+          <button onClick={() => navigate("/home/admin/userlists")}>
+            <FontAwesomeIcon icon={faUsers} />
+            Delete User
           </button>
 
           <button onClick={() => navigate("/home/admin/projectlist")}>
@@ -37,6 +42,11 @@ const AdminPage = () => {
           <button onClick={() => navigate("/home/admin/createproject")}>
           <FontAwesomeIcon icon={faDiagramProject} />
             Create New Project
+          </button>
+          
+          <button onClick={() => navigate("/home/admin/deleteproject")}>
+          <FontAwesomeIcon icon={faDiagramProject} />
+            Delete Project
           </button>
 
           

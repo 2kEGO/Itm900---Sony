@@ -24,7 +24,6 @@ const FileUpload = () => {
     const fileType = file.type;
     let uploadId = "";
     let parts = [];
-
     try {
       // Start the multipart upload
       const startUploadResponse = await axios.post(

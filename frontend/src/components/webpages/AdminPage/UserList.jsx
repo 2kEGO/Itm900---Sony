@@ -6,6 +6,7 @@ const UserManagementDashboard = () => {
   const [filterRole, setFilterRole] = useState('');
   const [showUserDetailModal, setShowUserDetailModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+
   
   // Sample user data
   const users = [
@@ -370,6 +371,7 @@ const UserManagementDashboard = () => {
                 </th>
               </tr>
             </thead>
+
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredUsers.map(user => (
                 <tr 

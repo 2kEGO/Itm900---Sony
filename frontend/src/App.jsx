@@ -9,6 +9,9 @@ import SelectProject from '../src/components/webpages/UserPage/selectProject.jsx
 import UserManagementDashboard from "../src/components/webpages/AdminPage/UserList.jsx"
 import Project from "../src/components/webpages/Projects/project.jsx"
 import CreateProject from './components/webpages/AdminPage/CreateProject.jsx'
+import Userlists from '../src/components/webpages/AdminPage/Userlists.jsx'
+import UpdateUser from './components/webpages/AdminPage/UpdateUser.jsx'
+import Deleteproject from './components/webpages/Projects/deleteproject.jsx'
 
 function App() {
 
@@ -23,11 +26,16 @@ function App() {
             <Route path='/home' element={<ChannelPage/>}></Route>
             <Route path='/register' element={<Register/>}></Route>
             <Route path='/home/artist' element={<SelectProject/>}></Route>
-            <Route path='/home/admin' element={<AdminPage/>}></Route>
-            <Route path='/home/admin/userlist' element={<UserManagementDashboard/>}></Route>
             <Route path='/home/artist/channel1' element={<Channel1/>}></Route>
+
+            <Route path='/home/admin' element={<AdminPage/>}></Route>
+            <Route path='/home/admin/userlist' element={<UserManagementDashboard/>}></Route>  
+
             <Route path='home/admin/projectlist' element={<Project/>}></Route>
             <Route path='/home/admin/createproject' element={<CreateProject/>}></Route>
+            <Route path='/home/admin/deleteproject' element={<Deleteproject/>}></Route>
+            <Route path='/home/admin/userlists' element={<Userlists/>}></Route>
+            <Route path='/home/admin/updateUser' element={<UpdateUser/>}></Route>
           </Route>
         
         </Routes>

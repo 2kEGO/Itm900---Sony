@@ -1,65 +1,76 @@
-import React,{useState, useEffect} from 'react'
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faFolderClosed, faPlus} from "@fortawesome/free-solid-svg-icons"
+import React, { useState, useEffect } from "react";
+import './project.css'
 
-import Cookies from 'js-cookie';
+const ProjectTable = () => {
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-const Project = () => {
-    const [project, setProject] = useState([]);
-
-      const fetchProject = async () => {
-        try {
-          const response = await fetch(`http://localhost:5000/sql/auth/projects/all`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
-    
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-    
-          const data = await response.json();
-          console.log("Fetched Project:", data); 
-    
-          
-          setProject(data);
-    
-        } catch (error) {
-          console.error("Error fetching project:", error);
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/sql/auth/projects/all");
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
         }
-      };
-    
-      useEffect(() => {
-        fetchProject(); 
-      }, []); 
-    
-      return (
-        <>
-        <div className="projects-container">
-            <div className="projects-wrapper">
-    
-            <div className="project-title">
-              <h1>Projects</h1>
-            </div>
-    
-            <div className="project-selection-container">
+        const data = await response.json();
+        setProjects(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-              {project.map((projects, index) => (
-                <button key={index} className="project-button">
-                  <FontAwesomeIcon icon={faFolderClosed} style={{color: "#74C0FC",}} />
-                  {projects.project_name}
-                </button>
-              ))}
-                
-            </div>
-    
-            </div>
-          </div>
-        </>
-      );
+    fetchProjects();
+  }, []);
+
+  if (loading) {
+    return <p className="project-table-loading">Loading...</p>;
+  }
+
+  if (error) {
+    return <p className="project-table-error">Error: {error}</p>;
+  }
+
+  return (
+    <div className="project-table-container">
+      <h1 className="project-table-title">Projects</h1>
+      <table className="project-table">
+        <thead>
+          <tr className="project-table-header">
+            <th className="project-table-header-cell">Project ID</th>
+            <th className="project-table-header-cell">Project Name</th>
+            <th className="project-table-header-cell">Project URL</th>
+            <th className="project-table-header-cell">Participating Users</th>
+            <th className="project-table-header-cell">User Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          {projects.map((project) => (
+            <tr key={project.project_id} className="project-table-row">
+              <td className="project-table-cell">{project.project_id}</td>
+              <td className="project-table-cell">{project.project_name}</td>
+              <td className="project-table-cell">
+                <a
+                  className="project-table-link"
+                  href={project.project_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {project.project_url}
+                </a>
+              </td>
+              <td className="project-table-cell">
+                {project.participating_users || "N/A"}
+              </td>
+              <td className="project-table-cell">{project.user_count}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
 };
 
-
-export default Project
+export default ProjectTable;
