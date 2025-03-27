@@ -13,8 +13,7 @@ const ChannelPage = () => {
 
   const getRole = Cookies.get("role");
   const getUserName = Cookies.get("username");
-  getRole.toLowerCase();
-  console.log(getRole)
+
 
   const navigate = useNavigate();
 
@@ -34,12 +33,12 @@ const ChannelPage = () => {
             Artist
           </button>
           
-          <button className={getRole === "admin" ? 'show':'hidden'}
+          <div className={getRole !== "admin" ? 'hidden':'show'}
                  onClick={() => navigate("/home/admin")}       
           >
             <img src={artistImg} alt="" />
             User Administration
-          </button>
+          </div>
 
           
         </div>

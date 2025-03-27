@@ -15,7 +15,7 @@ const SelectProject = () => {
   // Function to fetch project data and set it into state
   const fetchProject = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/sql/auth/projects/all`, {
+      const response = await fetch(`http://localhost:5002/sql/auth/projects/all`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

@@ -28,7 +28,6 @@ router.post('/register', async (req, res) => {
   }
 });
 
-
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
@@ -68,7 +67,6 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
-
 
 // Update User
 router.put('/update/:id', async (req, res) => {
