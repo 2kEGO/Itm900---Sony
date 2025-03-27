@@ -29,7 +29,7 @@ const FileUpload = () => {
       // Start the multipart upload
       const startUploadResponse = await axios.post(
         "http://localhost:5000/start-upload",
-        { fileName, fileType, note } // Send note with file metadata
+        { fileName, fileType, note } 
       );
 
       uploadId = startUploadResponse.data.uploadId;

@@ -3,5 +3,29 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
+
+    width: 50%;
+    height: 30vh;
     
+}
+
+.upload-container input {
+    margin-bottom: 5vh;
+    width: 100%;
+}
+
+.upload-container textarea {
+    width: 100%;
+    min-height: 10vh;
+    margin-bottom: 5vh;
+}
+
+.upload-container button {
+    width: 20%;
+    height: 4vh;
+}
+
+.upload-container button:hover {
+    background-color: hsl(192, 79%, 77%);
+    color: white;
 }
