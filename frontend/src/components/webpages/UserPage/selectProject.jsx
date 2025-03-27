@@ -9,13 +9,13 @@ import "./channel.css"
 const SelectProject = () => {
 
   const [project, setProject] = useState([]);  // Declare state for project
-  const getId = Cookies.get("id");
+  
   const navigate = useNavigate();
 
   // Function to fetch project data and set it into state
   const fetchProject = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/sql/auth/projects/${getId}`, {
+      const response = await fetch(`http://localhost:5000/sql/auth/projects/all`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ const SelectProject = () => {
 
         <div className="project-selection-container">
           {project.map((projects, index) => (
-            <button key={index} className="project-button" onClick={() => navigate(`${project.route}`)}>
+            <button key={index} className="project-button" onClick={() => navigate(`/home/artist/channel1`)}>
               <FontAwesomeIcon icon={faFolderClosed} style={{color: "#74C0FC",}} />
               {projects.project_name}
             </button>

@@ -127,10 +127,6 @@ app.get('/list-objects', async (req, res) => {
 
 
 
-
-
-
-
 // Start server
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
