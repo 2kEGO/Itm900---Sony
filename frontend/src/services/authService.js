@@ -2,7 +2,7 @@ import Cookies from 'js-cookie';
 
 export const LoginUser = async(user, pwd) => {
     try {
-        const res = await fetch(`http://localhost:${import.meta.env.VITE_PORT}/sql/auth/login`,{
+        const res = await fetch(`http://localhost:5002/sql/auth/login`,{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ export const LoginUser = async(user, pwd) => {
 
 export const RegisterUser = async (firstName, lastName, username, email, role, password ) => {
     try {
-      const res = await fetch(`http://localhost:${import.meta.env.VITE_PORT}/sql/auth/register`, {
+      const res = await fetch(`http://localhost:5002/sql/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -74,7 +74,7 @@ export const RegisterUser = async (firstName, lastName, username, email, role, p
 
 export const UpdateUser = async (userId, updatedData) => {
     try {
-        const res = await fetch(`http://localhost:${import.meta.env.VITE_PORT}/sql/auth/update/${userId}`, {
+        const res = await fetch(`http://localhost:5002/sql/auth/update/${userId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -104,7 +104,7 @@ export const UpdateUser = async (userId, updatedData) => {
 
 export const DeleteUser = async (userId) => {
     try {
-        const res = await fetch(`http://localhost:${import.meta.env.VITE_PORT}/sql/auth/delete/${userId}`, {
+        const res = await fetch(`http://localhost:5002/sql/auth/delete/${userId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

@@ -1,0 +1,61 @@
+.update-project-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+  }
+  
+  .update-project-container h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .update-project-select {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .project-info-table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+  }
+  
+  .project-info-table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+  }
+  
+  .update-project-button {
+    padding: 10px 15px;
+    margin: 10px 5px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .update-project-button:hover {
+    background-color: #45a049;
+  }
+  
+  .update-project-message {
+    color: red;
+    margin-top: 15px;
+  }
+  
+  .delete-button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .delete-button:hover {
+    background-color: darkred;
+  }
+  

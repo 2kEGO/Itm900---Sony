@@ -8,7 +8,7 @@ const Userlists = () => {
     useEffect(() => {
         const fetchUser = async () => {
           try {
-            const getUser = await fetch("http://localhost:5000/sql/auth/User/all", {
+            const getUser = await fetch("http://localhost:5002/sql/auth/User/all", {
               method: "GET",
               headers: {
                 "Content-Type": "application/json",
@@ -37,7 +37,7 @@ const Userlists = () => {
             return;
 
         try {
-            const response = await fetch(`http://localhost:5000/sql/auth/delete/${id}`, {
+            const response = await fetch(`http://localhost:5002/sql/auth/delete/${id}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",

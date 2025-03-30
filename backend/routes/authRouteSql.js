@@ -17,10 +17,7 @@ router.post('/register', async (req, res) => {
     }
 
     
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    
-    const newUser = await createUser(firstName, lastName, username, email, role, hashedPassword);
+    const newUser = await createUser(firstName, lastName, username, email, role, password);
     res.status(201).json({ message: 'User created successfully', user: newUser });
     
   } catch (error) {
@@ -28,6 +25,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
+//Login User
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
@@ -85,14 +83,11 @@ router.put('/update/:id', async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Ensure the email and username are unique
+  
     const conflictingUser = await getUserByEmailOrUsername(email, username);
     if (conflictingUser && conflictingUser.user_id !== parseInt(userId)) {
       return res.status(400).json({ message: 'Email or username is already taken by another user.' });
     }
-
-    
-    const hashedPassword = await bcrypt.hash(password, 10);
 
     
     const query = `
@@ -102,7 +97,7 @@ router.put('/update/:id', async (req, res) => {
       RETURNING *;
     `;
 
-    const values = [firstName, lastName, username, email, role, hashedPassword, userId];
+    const values = [firstName, lastName, username, email, role, password, userId];
 
     
     const { rows } = await pool.query(query, values);
@@ -114,7 +109,6 @@ router.put('/update/:id', async (req, res) => {
     res.status(500).json({ message: 'Error updating user' });
   }
 });
-
 
 // Delete User
 router.delete('/delete/:id', async (req, res) => {
@@ -137,8 +131,24 @@ router.delete('/delete/:id', async (req, res) => {
 router.get('/User/all', async (req, res) => {
   try {
     const query = `
-      SELECT *
-      FROM userInfo  
+      SELECT 
+        u.user_id,
+        u.first_name,
+        u.last_name,
+        u.username,
+        u.email,
+        u.role,
+        STRING_AGG(p.project_name, ', ') AS projects
+    FROM 
+        userinfo u
+    LEFT JOIN 
+        project_users pu ON u.user_id = pu.user_id
+    LEFT JOIN 
+        projects p ON pu.project_id = p.project_id
+    GROUP BY 
+        u.user_id, u.first_name, u.last_name, u.username, u.email, u.role
+    ORDER BY 
+        u.username;  
     `;
 
     const { rows } = await pool.query(query);
@@ -269,31 +279,18 @@ router.post('/projects', async (req, res) => {
 });
 
 // Add user to the projects
-router.post('/projects/:projectId/users', async (req, res) => {
-  const { projectId } = req.params; 
-  const { user_id } = req.body;
-  
+router.post('/projects/addUser/:projectId/:user_id', async (req, res) => {
+  const { projectId, user_id } = req.params; // Extract projectId and user_id from request params
+
   try {
-    
-    const checkIfUserExistsQuery = `
-      SELECT 1 
-      FROM project_users 
-      WHERE project_id = $1 AND user_id = $2;
-    `;
-    const checkResult = await pool.query(checkIfUserExistsQuery, [projectId, user_id]);
-
-    if (checkResult.rows.length > 0) {
-      return res.status(400).json({ message: 'User already added to the project' });
-    }
-
-    
     const insertUserToProjectQuery = `
       INSERT INTO project_users (project_id, user_id)
-      VALUES ($1, $2) RETURNING project_id, user_id;
+      VALUES ($1, $2) 
+      RETURNING project_id, user_id;
     `;
+
     const result = await pool.query(insertUserToProjectQuery, [projectId, user_id]);
 
-    
     res.status(201).json({
       message: 'User added to project successfully',
       projectId: result.rows[0].project_id,
@@ -305,17 +302,23 @@ router.post('/projects/:projectId/users', async (req, res) => {
   }
 });
 
+
 // Remove user from the projects
-router.delete('/projects/:projectId/users/:userId', async (req, res) => {
+router.delete('/projects/removeUser/:projectId/:userId', async (req, res) => {
   const { projectId, userId } = req.params;
 
   try {
     const deleteUserFromProjectQuery = `
       DELETE FROM project_users 
-      WHERE project_id = $1 AND user_id = $2;
+      WHERE project_id = $1 AND user_id = $2
+      RETURNING *;
     `;
-    
-    await pool.query(deleteUserFromProjectQuery, [projectId, userId]);
+
+    const result = await pool.query(deleteUserFromProjectQuery, [projectId, userId]);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: 'User not found in project' });
+    }
 
     res.json({ message: 'User removed from the project successfully' });
   } catch (error) {
@@ -365,6 +368,56 @@ router.delete('/projects/:projectId', async (req, res) => {
     
   } finally {
     client.release();
+  }
+});
+
+// Update Project
+router.put('/projects/update/:projectId', async (req, res) => {
+  const { projectId } = req.params;
+  const { project_name, project_url } = req.body;
+
+  // Basic validation
+  if (!project_name || !project_url) {
+    return res.status(400).json({ message: 'Project name and URL are required' });
+  }
+
+  try {
+    // Check if the project exists
+    const projectExistsQuery = `
+      SELECT * FROM projects 
+      WHERE project_id = $1
+    `;
+    const projectExists = await pool.query(projectExistsQuery, [projectId]);
+
+    if (projectExists.rows.length === 0) {
+      return res.status(404).json({ message: 'Project not found' });
+    }
+
+    // Update project query (excluding user_id)
+    const updateProjectQuery = `
+      UPDATE projects
+      SET 
+        project_name = $1, 
+        project_url = $2,
+        updated_at = CURRENT_TIMESTAMP
+      WHERE project_id = $3
+      RETURNING *
+    `;
+
+    const result = await pool.query(updateProjectQuery, [
+      project_name, 
+      project_url, 
+      projectId
+    ]);
+
+    res.json({
+      message: 'Project updated successfully',
+      project: result.rows[0]
+    });
+
+  } catch (error) {
+    console.error('Error updating project:', error);
+    res.status(500).json({ message: 'Error updating project' });
   }
 });
 

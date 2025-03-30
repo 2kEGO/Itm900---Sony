@@ -33,12 +33,12 @@ const ChannelPage = () => {
             Artist
           </button>
           
-          <div className={getRole !== "admin" ? 'hidden':'show'}
+          <button 
                  onClick={() => navigate("/home/admin")}       
           >
             <img src={artistImg} alt="" />
             User Administration
-          </div>
+          </button>
 
           
         </div>

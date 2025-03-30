@@ -17,7 +17,7 @@ const CreateProject = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("http://localhost:5000/sql/auth/User/fullname");
+        const response = await fetch("http://localhost:5002/sql/auth/User/fullname");
         if (response.ok) {
           const data = await response.json();
           setUsers(data);
@@ -35,7 +35,7 @@ const CreateProject = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5000/sql/auth/projects", {
+      const response = await fetch("http://localhost:5002/sql/auth/projects", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

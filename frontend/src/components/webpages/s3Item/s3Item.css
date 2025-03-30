@@ -1,0 +1,76 @@
+/* Container for the file list */
+.file-list-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Header style */
+  .file-list-container h1 {
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  /* Styling for each file item */
+  .file-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .file-item span {
+    font-size: 16px;
+    color: #555;
+    flex: 1;
+  }
+  
+  /* Button styles */
+  .file-item button {
+    background-color: #007BFF;
+    border: none;
+    color: white;
+    padding: 8px;
+    font-size: 16px;
+    margin: 0 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Download button - blue background */
+  .file-item button.download-btn {
+    background-color: #28a745;
+  }
+  
+  .file-item button.delete-btn {
+    background-color: #dc3545;
+  }
+  
+  /* Button hover effects */
+  .file-item button:hover {
+    background-color: #0056b3;
+  }
+  
+  .file-item button.download-btn:hover {
+    background-color: #218838;
+  }
+  
+  .file-item button.delete-btn:hover {
+    background-color: #c82333;
+  }
+  
+  /* No files message */
+  .no-files-message {
+    text-align: center;
+    font-size: 18px;
+    color: #777;
+  }
+  

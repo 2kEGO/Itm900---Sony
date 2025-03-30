@@ -19,6 +19,11 @@ const AdminPage = () => {
         </div>
 
         <div className="role-selection-container">
+          <button onClick={() => navigate("/home/admin/allUser")}>
+          <FontAwesomeIcon icon={faUserPlus} />
+            User List
+          </button>
+
           <button onClick={() => navigate("/register")}>
           <FontAwesomeIcon icon={faUserPlus} />
             SET UP NEW USER
@@ -37,6 +42,11 @@ const AdminPage = () => {
           <button onClick={() => navigate("/home/admin/projectlist")}>
           <FontAwesomeIcon icon={faListCheck} />
             Project List
+          </button>
+          
+          <button onClick={() => navigate("/home/admin/updateProject")}>
+          <FontAwesomeIcon icon={faListCheck} />
+            Update Project
           </button>
           
           <button onClick={() => navigate("/home/admin/createproject")}>

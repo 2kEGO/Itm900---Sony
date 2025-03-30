@@ -22,7 +22,7 @@ const UpdateUser = () => {
   // Function to fetch all users
   const fetchUsers = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/sql/auth/User/all`);
+      const response = await fetch(`http://localhost:5002/sql/auth/User/all`);
       const usersData = await response.json();
       setUsers(usersData);
     } catch (error) {
@@ -33,7 +33,7 @@ const UpdateUser = () => {
   // Function to fetch selected user's details
   const fetchUserDetails = async (userId) => {
     try {
-      const response = await fetch(`http://localhost:5000/sql/auth/update/${userId}`);
+      const response = await fetch(`http://localhost:5002/sql/auth/update/${userId}`);
       const userData = await response.json();
       setUserDetails({
         firstName: userData.first_name,

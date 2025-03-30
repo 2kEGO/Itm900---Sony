@@ -3,7 +3,7 @@ import "./channel.css"
 
 import FileUpload from '../UploadFiles/Upload'
 import FileList from '../s3Item/s3Item'
-import {availableProjects} from '../../../context/data.js'
+
 
 const Channel1 = () => {
   
