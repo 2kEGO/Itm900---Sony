@@ -44,6 +44,10 @@ const Channel1 = () => {
               
             {currentChannel === "General" && <FileUpload />}
             {currentChannel === "Mix" && <FileList />}
+            {currentChannel === "Master" && <FileList />}
+            {currentChannel === "Demo" && <FileList />}
+            {currentChannel === "Static Asset" && <FileList />}
+            {currentChannel === "Social content" && <FileList />}
 
           </div>
         </div>

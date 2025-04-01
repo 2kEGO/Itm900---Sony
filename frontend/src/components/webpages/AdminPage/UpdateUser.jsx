@@ -33,7 +33,7 @@ const UpdateUser = () => {
   // Function to fetch selected user's details
   const fetchUserDetails = async (userId) => {
     try {
-      const response = await fetch(`http://localhost:5002/sql/auth/update/${userId}`);
+      const response = await fetch(`http://localhost:5002/sql/auth/User/${userId}`);
       const userData = await response.json();
       setUserDetails({
         firstName: userData.first_name,
@@ -41,7 +41,7 @@ const UpdateUser = () => {
         username: userData.username,
         email: userData.email,
         role: userData.role,
-        password: '', // Password should be kept empty for safety
+        password: '', 
       });
     } catch (error) {
       console.error('Error fetching user details:', error);
@@ -67,7 +67,7 @@ const UpdateUser = () => {
     }
 
     try {
-      const response = await fetch(`/sql/update/${selectedUser}`, {
+      const response = await fetch(`http://localhost:5002/sql/auth/update/${selectedUser}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -78,6 +78,7 @@ const UpdateUser = () => {
       const result = await response.json();
       if (response.ok) {
         setMessage('User updated successfully!');
+        alert('User updated successfully!');
       } else {
         setMessage(result.message || 'Failed to update user');
       }

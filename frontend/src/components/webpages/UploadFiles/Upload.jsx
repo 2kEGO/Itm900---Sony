@@ -7,6 +7,7 @@ const FileUpload = () => {
   const [file, setFile] = useState(null);
   const [fileUrl, setFileUrl] = useState("");
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [note, setNote] = useState("");
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -62,6 +63,7 @@ const FileUpload = () => {
 
       setFileUrl(completeUploadResponse.data.fileUrl);
       alert("File uploaded successfully");
+      setNote("");
     } catch (error) {
       console.error("Error uploading file:", error);
     }
@@ -73,6 +75,7 @@ const FileUpload = () => {
       <button disabled={!file} onClick={handleFileUpload}>
         Upload
       </button>
+      <input type="text" placeholder="Note" value={note} onChange={(e) => setNote(e.target.event)}/>
       <br />
       {uploadProgress > 0 && <progress value={uploadProgress} max="100">{uploadProgress}%</progress>}
       <br />

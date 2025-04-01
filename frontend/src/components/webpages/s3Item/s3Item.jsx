@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowDown, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faArrowDown, faTrashCan, faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 import './s3Item.css'; 
 
 const FileList = () => {
@@ -35,6 +35,12 @@ const FileList = () => {
     link.click();
   };
 
+  // Format timestamp in a user-friendly way
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString();
+  };
+
   useEffect(() => {
     fetchFileList();
   }, []);
@@ -46,8 +52,14 @@ const FileList = () => {
         {files.length > 0 ? (
           files.map((file, index) => (
             <div key={index} className="file-item">
-              <span>{file.Key}</span>
-              <div>
+              <div className="file-info">
+                <span className="file-name">{file.Key}</span>
+                <span className="file-date">
+                  <FontAwesomeIcon icon={faCalendarAlt} className="date-icon" />
+                  {formatDate(file.LastModified)}
+                </span>
+              </div>
+              <div className="file-actions">
                 <button
                   className="download-btn"
                   onClick={() => downloadFile(file.Key)}

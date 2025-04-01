@@ -10,7 +10,7 @@ const CreateProject = () => {
 
 
   const handleUserSelect = (e) => {
-    const selectedOptions = Array.from(e.target.selectedOptions, (option) => option.value);
+    const selectedOptions = Array.from(e.target.selectedOptions, (option) => parseInt(option.value, 10));
     setSelectedUsers(selectedOptions);
   };
 
@@ -43,19 +43,22 @@ const CreateProject = () => {
         body: JSON.stringify({
           project_name: projectName,
           project_url: projectUrl,
-          user_id: userId,
+          user_ids: selectedUsers,  // This should be an array of user IDs
         }),
       });
 
       if (response.ok) {
         alert("Project created successfully!");
+        // Reset form or redirect as needed
       } else {
-        alert("Error creating project");
+        const errorData = await response.json();
+        alert(`Error creating project: ${errorData.message}`);
       }
     } catch (error) {
       console.error("Error:", error);
     }
-  };
+};
+
 
   return (
     <div className="container">

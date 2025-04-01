@@ -1,0 +1,94 @@
+/* AdminPage.css */
+.admin-body-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    min-height: 100vh;
+    padding: 2rem;
+    background-color: #f5f5f5;
+  }
+  
+  .admin-body-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+  }
+  
+  .admin-role-title {
+    margin-bottom: 2rem;
+    text-align: center;
+    border-bottom: 2px solid #eaeaea;
+    padding-bottom: 1rem;
+  }
+  
+  .admin-role-title h1 {
+    font-size: 2rem;
+    color: #333;
+    font-weight: 600;
+  }
+  
+  .admin-role-selection-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+  }
+  
+  .admin-nav-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem 1rem;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #495057;
+    gap: 0.8rem;
+    text-align: center;
+  }
+  
+  .admin-nav-button:hover {
+    background-color: #e9ecef;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .admin-nav-button svg {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #0d6efd;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .admin-role-selection-container {
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+    
+    .admin-nav-button {
+      padding: 1.2rem 0.8rem;
+    }
+    
+    .admin-role-title h1 {
+      font-size: 1.5rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .admin-role-selection-container {
+      grid-template-columns: 1fr;
+    }
+    
+    .admin-body-wrapper {
+      padding: 1rem;
+    }
+  }

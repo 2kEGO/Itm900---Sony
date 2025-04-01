@@ -134,12 +134,12 @@ app.post("/upload-text-file", async (req, res) => {
 
 //Get Item from S3 bucket
 app.get('/list-s3-items', async (req, res) => {
-  const bucketParams = {
-    Bucket: ck.S3_BUCKET, 
-  };
+  const bucketParams = {Bucket: ck.S3_BUCKET,};
 
   try {
     const data = await s3.listObjects(bucketParams).promise();
+    // The Last-Modified date is included in the data.Contents array
+    // Each object has a LastModified property which is the upload timestamp
     res.status(200).json(data);
   } catch (error) {
     console.error("Error listing objects:", error);

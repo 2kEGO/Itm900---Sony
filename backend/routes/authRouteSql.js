@@ -160,6 +160,52 @@ router.get('/User/all', async (req, res) => {
   }
 });
 
+//GET User info by ID
+router.get('/User/:id', async (req, res) => {
+  try {
+    const userId = req.params.id;
+    
+    // Input validation
+    if (!userId || isNaN(parseInt(userId))) {
+      return res.status(400).json({ message: 'Invalid user ID' });
+    }
+
+    const query = `
+      SELECT 
+        u.user_id,
+        u.first_name,
+        u.last_name,
+        u.username,
+        u.email,
+        u.role,
+        u.created_at,
+        u.updated_at,
+        STRING_AGG(p.project_name, ', ') AS projects
+      FROM 
+        userinfo u
+      LEFT JOIN 
+        project_users pu ON u.user_id = pu.user_id
+      LEFT JOIN 
+        projects p ON pu.project_id = p.project_id
+      WHERE 
+        u.user_id = $1
+      GROUP BY 
+        u.user_id, u.first_name, u.last_name, u.username, u.email, u.role, u.created_at, u.updated_at
+    `;
+
+    const { rows } = await pool.query(query, [userId]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json(rows[0]);
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 //Get User fullname
 router.get('/User/fullname', async (req, res) => {
   try {
@@ -238,7 +284,7 @@ router.post('/projects', async (req, res) => {
   const { project_name, project_url, user_ids } = req.body;
 
   if (!user_ids || user_ids.length === 0) {
-    return res.status(400).json({ message: "At least one artist must be added" });
+    return res.status(400).json({ message: "At least one user must be added" });
   }
 
   const client = await pool.connect();
@@ -246,10 +292,8 @@ router.post('/projects', async (req, res) => {
   try {
     await client.query('BEGIN');
 
-    
     const owner_id = user_ids[0];
 
-    
     const insertProjectQuery = `
       INSERT INTO projects (project_name, project_url, user_id, created_at)
       VALUES ($1, $2, $3, NOW()) RETURNING project_id;
@@ -258,13 +302,14 @@ router.post('/projects', async (req, res) => {
     const result = await client.query(insertProjectQuery, [project_name, project_url, owner_id]);
     const projectId = result.rows[0].project_id;
 
-    
-    const insertUsersQuery = `
-      INSERT INTO project_users (project_id, user_id)
-      VALUES ${user_ids.map((_, i) => `($1, $${i + 2})`).join(", ")};
-    `;
-    
-    await client.query(insertUsersQuery, [projectId, ...user_ids]);
+    // Insert users into project_users table, but avoid duplicating the owner if they're already associated
+    // with the project through the projects table
+    for (const userId of user_ids) {
+      await client.query(
+        'INSERT INTO project_users (project_id, user_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
+        [projectId, userId]
+      );
+    }
 
     await client.query('COMMIT');
     res.status(201).json({ message: "Project created successfully", projectId });
@@ -272,11 +317,12 @@ router.post('/projects', async (req, res) => {
   } catch (error) {
     await client.query('ROLLBACK');
     console.error('Error creating project:', error);
-    res.status(500).json({ message: "Error creating project" });
+    res.status(500).json({ message: "Error creating project", error: error.message });
   } finally {
     client.release();
   }
 });
+
 
 // Add user to the projects
 router.post('/projects/addUser/:projectId/:user_id', async (req, res) => {

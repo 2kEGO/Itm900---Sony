@@ -74,3 +74,26 @@
     color: #777;
   }
   
+  .file-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .file-name {
+    font-weight: 500;
+  }
+  
+  .file-date {
+    font-size: 0.85rem;
+    color: #666;
+  }
+  
+  .date-icon {
+    margin-right: 5px;
+  }
+  
+  .file-actions {
+    display: flex;
+    gap: 10px;
+  }
